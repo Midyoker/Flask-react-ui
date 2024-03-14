@@ -1,0 +1,3 @@
+https://www.kaggle.com/datasets/mahmoudreda55/satellite-image-classification
+
+https://www.kaggle.com/datasets/arjuntyagi25/satellite-images
