@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
@@ -7,6 +8,7 @@ from PIL import Image
 from io import BytesIO
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes in the app
 
 # Load the trained model
 model = load_model('models/terrain_model.h5')
@@ -59,7 +61,8 @@ def predict():
 
 @app.route('/graph.jpg')
 def get_graph():
-    return send_file('graph.jpg', mimetype='image/jpeg')
+    graph_image_path = os.path.join('models', 'graph.jpg')
+    return send_file(graph_image_path, mimetype='image/jpeg')
 
 if __name__ == '__main__':
     app.run(debug=True)
