@@ -36,7 +36,7 @@ test_set = test_datagen.flow_from_directory(val_dir, target_size=(64, 64), batch
 # Train the model
 csv_logger = tf.keras.callbacks.CSVLogger(os.path.join(script_dir, 'metrics.csv'))
 
-classifier.fit(training_set, steps_per_epoch=175, epochs=80,
+classifier.fit(training_set, steps_per_epoch=175, epochs=2,
                validation_data=test_set, validation_steps=5, callbacks=[csv_logger])
 
 # Save the trained model
@@ -57,5 +57,11 @@ plt.xlabel('epoch')
 plt.ylabel('Accuracy and Loss')
 plt.title('Graph Of Accuracy')
 plt.legend()
-fig.savefig(os.path.join(script_dir, 'graph.jpg'))
+graph_path = os.path.join(script_dir, 'graph.jpg')
+fig.savefig(graph_path)
 
+# Close the plot to prevent showing it
+plt.close(fig)
+
+# Print the path to the saved graph image
+print("Graph image saved at:", graph_path)

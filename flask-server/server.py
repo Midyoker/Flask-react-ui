@@ -1,8 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
-from tensorflow.keras.models import load_model
+import os
+from PIL import Image
+from io import BytesIO
 
 app = Flask(__name__)
 
@@ -10,10 +12,12 @@ app = Flask(__name__)
 model = load_model('models/terrain_model.h5')
 
 def preprocess_image_data(image_data):
-    # Load the image using keras' image module
-    img = image.load_img(image_data, target_size=(64, 64))  # Adjust target size as needed
+    # Open the image using PIL's Image module
+    img = Image.open(BytesIO(image_data.read()))
+    # Resize the image to the target size
+    img = img.resize((64, 64))  # Adjust target size as needed
     # Convert the image to an array
-    img_array = image.img_to_array(img)
+    img_array = np.array(img)
     # Expand the dimensions to match the model's expected input shape
     img_array = np.expand_dims(img_array, axis=0)
     # Normalize the image
@@ -44,13 +48,18 @@ def predict():
             processed_data = preprocess_image_data(image_data)
             prediction = model.predict(processed_data)
             decoded_prediction = decode_prediction(prediction)
-            return jsonify({'prediction': decoded_prediction})
+            
+            # Serve the graph image file
+            graph_image_path = 'graph.jpg'
+            return jsonify({'prediction': decoded_prediction, 'graph': f'http://127.0.0.1:5000/{graph_image_path}'})
         except Exception as e:
             return jsonify({'error': str(e)}), 500
-        
-
     else:
         return jsonify({'error': 'Method Not Allowed'}), 405
+
+@app.route('/graph.jpg')
+def get_graph():
+    return send_file('graph.jpg', mimetype='image/jpeg')
 
 if __name__ == '__main__':
     app.run(debug=True)
