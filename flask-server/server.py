@@ -54,7 +54,7 @@ def predict():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     else:
-        return jsonify({'error': 'Method Not Allowed'}), 405e
+        return jsonify({'error': 'Method Not Allowed'}), 405
 
 @app.route('/graph.jpg')
 def get_graph():
