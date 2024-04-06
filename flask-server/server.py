@@ -27,10 +27,7 @@ def preprocess_image_data(image_data):
     return img_array
 
 def decode_prediction(prediction):
-    # Assuming prediction is a one-hot encoded array
-    # You can decode it based on the index with the highest probability
-    # Assuming you have a list of class labels
-    class_labels = ['class1', 'class2', 'class3', 'class4']
+    class_labels = ['cloudy', 'desert', 'green_area', 'water']
     decoded_prediction = class_labels[np.argmax(prediction)]
     return decoded_prediction
 
@@ -57,7 +54,7 @@ def predict():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     else:
-        return jsonify({'error': 'Method Not Allowed'}), 405
+        return jsonify({'error': 'Method Not Allowed'}), 405e
 
 @app.route('/graph.jpg')
 def get_graph():
